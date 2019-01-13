@@ -17,11 +17,7 @@ namespace Music.Infra.Data.Repositories
 
         public virtual int Add(TEntity obj)
         {
-            function = (SqlDataReader reader) => {
-                return reader.RecordsAffected;
-            };
-
-            return MusicSql<int>.Run(procedureName, parameters, function);
+            return MusicSql<int>.Run(procedureName, parameters, SetData());
         }
 
         public void Dispose()
@@ -34,19 +30,37 @@ namespace Music.Infra.Data.Repositories
             return MusicSql<IEnumerable<TEntity>>.Run(procedureName, parameters, function);
         }
 
-        public virtual TEntity GetById(int id)
+        public virtual TEntity Get(TEntity obj)
         {
             return MusicSql<TEntity>.Run(procedureName, parameters, function);
         }
 
-        public void Remove(int id)
+        public virtual int Remove(int id)
         {
-            MusicSql<TEntity>.Run(procedureName, parameters, function);
+            return MusicSql<int>.Run(procedureName, parameters, SetData());
         }
 
-        public void Update(TEntity obj)
+        public virtual int Update(TEntity obj)
         {
-            MusicSql<TEntity>.Run(procedureName, parameters, function);
+            return MusicSql<int>.Run(procedureName, parameters, SetData());
+        }
+
+        public virtual Func<SqlDataReader, IEnumerable<TEntity>> GetData()
+        {
+            return (SqlDataReader reader) =>
+            {
+                var results = new List<TEntity>();
+
+                return results;
+            };
+        }
+
+        public Func<SqlDataReader, dynamic> SetData()
+        {
+            return (SqlDataReader reader) =>
+            {
+                return reader.RecordsAffected;
+            };
         }
     }
 }

@@ -34,19 +34,19 @@ namespace Music.Domain.Services
             return _repository.GetAll();
         }
 
-        public TEntity GetById(int id)
+        public TEntity Get(TEntity obj)
         {
-            return _repository.GetById(id);
+            return _repository.Get(obj);
         }
 
-        public void Remove(int id)
+        public int Remove(int id)
         {
-            _repository.Remove(id);
+            return _repository.Remove(id);
         }
 
-        public void Update(TEntity obj)
+        public int Update(TEntity obj)
         {
-            _repository.Update(obj);
+            return _repository.Update(obj);
         }
     }
 }

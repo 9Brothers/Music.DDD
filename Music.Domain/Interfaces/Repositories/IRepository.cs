@@ -10,10 +10,12 @@ namespace Music.Domain.Interfaces
     public interface IRepository<TEntity> where TEntity : class
     {
         int Add(TEntity obj);
-        TEntity GetById(int id);
+        TEntity Get(TEntity obj);
         IEnumerable<TEntity> GetAll();
-        void Update(TEntity obj);
-        void Remove(int id);
+        int Update(TEntity obj);
+        int Remove(int id);
         void Dispose();
+        Func<SqlDataReader, IEnumerable<TEntity>> GetData();
+        Func<SqlDataReader, dynamic> SetData();
     }
 }

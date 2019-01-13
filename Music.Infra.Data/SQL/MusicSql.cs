@@ -14,6 +14,14 @@ namespace Music.Infra.Data.SQL
         {
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["DBMUSIC"].ConnectionString))
             {
+                foreach (var parameter in parameters)
+                {
+                    if (parameter.Value == null)
+                    {
+                        parameter.Value = DBNull.Value;
+                    }
+                }
+
                 var command = new SqlCommand(procedureName, connection);
                 command.Parameters.AddRange(parameters);
                 command.CommandType = System.Data.CommandType.StoredProcedure;

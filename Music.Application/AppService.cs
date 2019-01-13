@@ -33,19 +33,21 @@ namespace Music.Application
             return service.GetAll();
         }
 
-        public TEntity GetById(int id)
+        public TEntity Get(TEntity obj)
         {
-            return service.GetById(id);
+            return service.Get(obj);
         }
 
-        public void Remove(int id)
+        public int Remove(int id)
         {
-            service.Remove(id);
+            return service.Remove(id);
         }
 
-        public void Update(TEntity obj)
+        public int Update(TEntity obj)
         {
-            service.Update(obj);
+            return service.Update(obj);
         }
+
+        
     }
 }

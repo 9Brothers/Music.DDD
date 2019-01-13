@@ -20,7 +20,7 @@ namespace Music.Infra.Data.Repositories
                 new SqlParameter("@ArtistName", obj.Artist.Name),
             };
             parameters = param;
-            
+
             return base.Add(obj);
         }
 
@@ -34,7 +34,30 @@ namespace Music.Infra.Data.Repositories
             };
             parameters = param;
 
-            function = (SqlDataReader reader) => {
+            function = GetData();
+
+            return base.GetAll();
+        }
+
+        public override Song Get(Song obj)
+        {
+            procedureName = "SongsList";
+            SqlParameter[] param = {
+                new SqlParameter("@SongName", obj.Name),
+                new SqlParameter("@StyleName", obj.Style.Name),
+                new SqlParameter("@ArtistName", obj.Artist.Name),
+            };
+            parameters = param;
+
+            function = GetData();
+
+            return base.GetAll().FirstOrDefault();
+        }
+
+        public override Func<SqlDataReader, IEnumerable<Song>> GetData() {
+
+            return (SqlDataReader reader) =>
+            {
                 var results = new List<Song>();
 
                 while (reader.Read())
@@ -60,28 +83,6 @@ namespace Music.Infra.Data.Repositories
 
                 return results;
             };
-
-            return base.GetAll();
-        }
-
-        public override Song GetById(int id)
-        {
-            throw new Exception("Not implemented");
-
-            //return base.GetById(id);
-        }
-
-        public Song Get(Song obj)
-        {
-            procedureName = "SongsList";
-            SqlParameter[] param = {
-                new SqlParameter("@SongName", obj.Name),
-                new SqlParameter("@StyleName", obj.Style.Name),
-                new SqlParameter("@ArtistName", obj.Artist.Name),
-            };
-            parameters = param;
-
-            return GetAll().FirstOrDefault();
         }
     }
 }
