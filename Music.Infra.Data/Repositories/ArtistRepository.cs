@@ -64,7 +64,7 @@ namespace Music.Infra.Data.Repositories
 
         public override int Remove(int id)
         {
-            procedureName = "ArtistUpdate";
+            procedureName = "ArtistRemove";
             SqlParameter[] param = {
                 new SqlParameter("@ArtistId", id),                
             };

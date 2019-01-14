@@ -54,6 +54,31 @@ namespace Music.Infra.Data.Repositories
             return base.GetAll().FirstOrDefault();
         }
 
+        public override int Update(Song obj)
+        {
+            procedureName = "SongsUpdate";
+            SqlParameter[] param = {
+                new SqlParameter("@SongId", obj.IdSong),
+                new SqlParameter("@SongName", obj.Name),
+                new SqlParameter("@StyleId", obj.Style.IdStyle),
+                new SqlParameter("@ArtistId", obj.Artist.IdArtist),
+            };
+            parameters = param;
+
+            return base.Update(obj);
+        }
+
+        public override int Remove(int id)
+        {
+            procedureName = "SongsRemove";
+            SqlParameter[] param = {
+                new SqlParameter("@SongId", id),                
+            };
+            parameters = param;
+
+            return base.Remove(id);
+        }
+
         public override Func<SqlDataReader, IEnumerable<Song>> GetData() {
 
             return (SqlDataReader reader) =>

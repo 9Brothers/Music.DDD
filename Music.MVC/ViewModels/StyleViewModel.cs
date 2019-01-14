@@ -13,8 +13,8 @@ namespace Music.MVC.ViewModels
         public int IdStyle { get; set; }
 
         [Required(ErrorMessage = "Preencha o campo Nome")]
-        [MaxLength(150, ErrorMessage = "Máximo {0} caracteres")]
-        [MinLength(2, ErrorMessage = "Mínimo {0} caracteres")]
+        //[MaxLength(150, ErrorMessage = "Máximo {0} caracteres")]
+        //[MinLength(2, ErrorMessage = "Mínimo {0} caracteres")]
         public string Name { get; set; }
     }
 }

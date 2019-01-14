@@ -55,9 +55,7 @@ namespace Music.MVC.Controllers
             {
                 var artist = Mapper.Map<ArtistViewModel, Artist>(artistViewModel);
 
-                var rowsAffected = service.Add(artist);
-
-                if (rowsAffected < 0)
+                if (service.Add(artist) > 0)
                 {
                     return RedirectToAction("Index");
                 }
@@ -97,10 +95,8 @@ namespace Music.MVC.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            if (ModelState.IsValid)
+            if (service.Remove(id) > 0)
             {
-                service.Remove(id);
-
                 return RedirectToAction("Index");
             }
 

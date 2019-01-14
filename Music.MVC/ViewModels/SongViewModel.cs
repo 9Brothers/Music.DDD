@@ -15,7 +15,11 @@ namespace Music.MVC.ViewModels
         [MaxLength(150, ErrorMessage = "Máximo {0} caracteres")]
         [MinLength(2, ErrorMessage = "Mínimo {0} caracteres")]
         public string Name { get; set; }
+
+        [Display(Name = "Artist Name")]
         public ArtistViewModel Artist { get; set; }
+
+        [Display(Name = "Style Name")]
         public StyleViewModel Style { get; set; }
     }
 }

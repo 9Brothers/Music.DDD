@@ -1,7 +1,7 @@
 use Music;
 go
-create procedure ArtistRemove
-@ArtistId varchar(max)
+alter procedure ArtistRemove
+@ArtistId int
 as
 	if @ArtistId is not null begin
 		

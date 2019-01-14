@@ -1,15 +1,15 @@
 use Music;
 go
-create procedure ArtistInclude
-@Name varchar(max)
+alter procedure ArtistInclude
+@ArtistName varchar(max)
 as
-	if exists (select 1 from Artists where Name = @Name) begin
-		select 'Já existe um artista com esse nome: "'+ @Name +'"' as 'Erro'
+	if exists (select 1 from Artists where Name = @ArtistName) begin
+		select 'Já existe um artista com esse nome: "'+ @ArtistName +'"' as 'Erro'
 		return 0
 	end
 
 	begin tran
-	insert into Artists (Name) values (@Name)	
+	insert into Artists (Name) values (@ArtistName)	
 	commit tran
 
 	return scope_identity()

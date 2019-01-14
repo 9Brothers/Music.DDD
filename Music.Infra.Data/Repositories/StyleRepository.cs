@@ -26,6 +26,7 @@ namespace Music.Infra.Data.Repositories
         {
             procedureName = "StyleList";
             SqlParameter[] param = {
+                new SqlParameter("@StyleId", DBNull.Value),
                 new SqlParameter("@StyleName", DBNull.Value),
             };
             parameters = param;
@@ -47,6 +48,29 @@ namespace Music.Infra.Data.Repositories
             function = GetData();
 
             return base.GetAll().FirstOrDefault();
+        }
+
+        public override int Update(Style obj)
+        {
+            procedureName = "StyleUpdate";
+            SqlParameter[] param = {
+                new SqlParameter("@StyleId", obj.IdStyle),
+                new SqlParameter("@StyleName", obj.Name),
+            };
+            parameters = param;
+
+            return base.Update(obj);
+        }
+
+        public override int Remove(int id)
+        {
+            procedureName = "StyleRemove";
+            SqlParameter[] param = {
+                new SqlParameter("@StyleId", id),                
+            };
+            parameters = param;
+
+            return base.Remove(id);
         }
 
         public override Func<SqlDataReader, IEnumerable<Style>> GetData()

@@ -14,17 +14,22 @@ namespace Music.MVC.Controllers
 {
     public class SongController : Controller
     {
-        private readonly ISongAppService _songApp;
+        private readonly ISongAppService songService;
+        private readonly IArtistAppService artistService;
+        private readonly IStyleAppService styleService;
 
-        public SongController(ISongAppService songApp)
+        public SongController(ISongAppService songService, IArtistAppService artistService, IStyleAppService styleService)
         {
-            _songApp = songApp;
+            this.songService = songService;
+            this.artistService = artistService;
+            this.styleService = styleService;
         }
+
 
         // GET: Song
         public ActionResult Index()
         {
-            var songs = _songApp.GetAll();
+            var songs = songService.GetAll();
 
             var clienteViewModel = Mapper.Map<IEnumerable<Song>, IEnumerable<SongViewModel>>(songs);
 
@@ -34,12 +39,19 @@ namespace Music.MVC.Controllers
         // GET: Song/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var song = songService.Get(new Song { IdSong = id });
+
+            var songViewModel = Mapper.Map<Song, SongViewModel>(song);
+
+            return View(songViewModel);
         }
 
         // GET: Song/Create
         public ActionResult Create()
         {
+            ViewBag.Artists = artistService.GetAll().Select(a => new SelectListItem { Text = a.Name, Value = a.Name });
+            ViewBag.Styles = styleService.GetAll().Select(s => new SelectListItem { Text = s.Name, Value = s.Name });
+
             return View("Create");
         }
 
@@ -52,34 +64,37 @@ namespace Music.MVC.Controllers
             {
                 var songDomain = Mapper.Map<SongViewModel, Song>(songViewModel);
 
-                _songApp.Add(songDomain);
-
-                return RedirectToAction("Index");
+                if (songService.Add(songDomain) > 0)
+                {
+                    return RedirectToAction("Index");
+                }
             }
 
-            return RedirectToAction("Error");
+            return View("Error");
         }
 
         // GET: Song/Edit/5
         public ActionResult Edit(int id)
         {
+            ViewBag.Artists = artistService.GetAll().Select(a => new SelectListItem { Text = a.Name, Value = a.IdArtist.ToString() });
+            ViewBag.Styles = styleService.GetAll().Select(s => new SelectListItem { Text = s.Name, Value = s.IdStyle.ToString() });
+
             return View();
         }
 
         // POST: Song/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, SongViewModel songViewModel)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var song = Mapper.Map<SongViewModel, Song>(songViewModel);
+            song.IdSong = id;
 
+            if (songService.Update(song) > 0)
+            {
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View("Error");
         }
 
         // GET: Song/Delete/5
@@ -90,18 +105,14 @@ namespace Music.MVC.Controllers
 
         // POST: Song/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, SongViewModel songViewModel)
         {
-            try
+            if (songService.Remove(id) > 0)
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View("Error");
         }
     }
 }
